@@ -12,8 +12,9 @@ public class DriverApp {
         HibernateOperations ho = new HibernateOperations();
         setUpAuthorsAndBooks(ho);
 
-        Book rur = ho.findBookById(2);
-        Author capek = ho.queryForAuthorByName("K.Capek");
+        //method calls just for try
+        //Book rur = ho.findBookById(2);
+        //Author capek = ho.queryForAuthorByName("K.Capek");
 
     }
 
