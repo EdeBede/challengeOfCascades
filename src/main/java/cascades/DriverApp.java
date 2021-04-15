@@ -2,25 +2,58 @@ package cascades;
 
 import cascades.domain.Author;
 import cascades.domain.Book;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import java.util.Arrays;
 
 public class DriverApp {
 
     public static void main(String[] args) {
         HibernateOperations ho = new HibernateOperations();
-        ho.saveAuthor();
+        setUpAuthorsAndBooks(ho);
 
         Book rur = ho.findBookById(2);
         Author capek = ho.queryForAuthorByName("K.Capek");
 
     }
 
-    private void setUpAuthorsAndBooks() {
+    private static void setUpAuthorsAndBooks(HibernateOperations ho) {
+        EntityManager em = HibernateOperations.getEntityManager();
+        em.getTransaction()
+                .begin();
+        Author kCapek = new Author();
+        Author kernighan = new Author();
+        Author ritchie = new Author();
+
+        Book rur = new Book();
+        Book cProg = new Book();
+        Book unixEnv = new Book();
+        Book unixProg = new Book();
+
+        kCapek.setName("K.Capek");
+        kernighan.setName("Kernighan");
+        ritchie.setName("Ritchie");
+
+        rur.setTitle("Rossum's Universal Robots");
+        cProg.setTitle("The C programming Language");
+        unixEnv.setTitle("The unix environment");
+        unixProg.setTitle("Unix for programmers");
+
+        kCapek.setBooks(Arrays.asList(rur));
+        kernighan.setBooks(Arrays.asList(cProg,unixEnv));
+        ritchie.setBooks(Arrays.asList(cProg,unixProg));
+
+        rur.setAuthors(Arrays.asList(kCapek));
+        cProg.setAuthors(Arrays.asList(kernighan,ritchie));
+        unixEnv.setAuthors(Arrays.asList(kernighan));
+        unixProg.setAuthors(Arrays.asList(ritchie));
+
+        em.persist(kCapek);
+        em.persist(kernighan);
+        em.persist(ritchie);
+        em.getTransaction()
+                .commit();
+
+
     }
 }

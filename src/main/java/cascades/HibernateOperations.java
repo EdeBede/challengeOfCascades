@@ -21,16 +21,10 @@ public class HibernateOperations {
         return emf.createEntityManager();
     }
 
-    public void saveAuthor() {
+    public void saveAuthor(Author author) {
         EntityManager em = HibernateOperations.getEntityManager();
         em.getTransaction()
                 .begin();
-        Author author = new Author();
-        Book book = new Book();
-        book.setAuthors(Arrays.asList(author));
-        book.setTitle("Rossum's Universal Robots");
-        author.setName("K.Capek");
-        author.setBooks(Arrays.asList(book));
         em.persist(author);
         em.getTransaction()
                 .commit();
@@ -43,14 +37,6 @@ public class HibernateOperations {
         return book;
     }
 
-   /* public Author queryForAuthorByName(String queriedName){
-        EntityManager em = HibernateOperations.getEntityManager();
-        Author author = (Author) em.createQuery("SELECT author FROM Author author where author.name=?1")
-                .setParameter(1, queriedName)
-                .getSingleResult();
-        return author;
-    }*/
-
     public Author queryForAuthorByName(java.lang.String queriedName) {
         EntityManager em = HibernateOperations.getEntityManager();
         Author author = (Author) em.createQuery("SELECT author FROM Author author where author.name=?1")
@@ -58,27 +44,4 @@ public class HibernateOperations {
                 .getSingleResult();
         return author;
     }
-
-
-
-
-    /*public List<?> queryForMovies() {
-        EntityManager em = HibernateOperations.getEntityManager();
-        List<?> movies = em.createQuery("SELECT movie from Movie movie where movie.language = ?1")
-                .setParameter(1, "English")
-                .getResultList();
-        return movies;
-    }*/
-
-
-  /*  public void removeMovie() {
-        EntityManager em = HibernateOperations.getEntityManager();
-        em.getTransaction()
-                .begin();
-        Movie movie = em.find(Movie.class, new Long(1L));
-        em.remove(movie);
-        em.getTransaction()
-                .commit();
-    }*/
-
 }
