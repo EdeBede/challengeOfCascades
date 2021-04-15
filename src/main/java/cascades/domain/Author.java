@@ -13,7 +13,7 @@ public class Author {
 
     private String name;
 
-    @ManyToMany (mappedBy = "authors", cascade = CascadeType.ALL)
+    @ManyToMany (mappedBy = "authors", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Book> books = new ArrayList<Book>();
 
     public int getId() {

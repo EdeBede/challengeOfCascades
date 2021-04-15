@@ -14,8 +14,9 @@ public class DriverApp {
         setUpAuthorsAndBooks(ho);
 
         Book rur = ho.findBookById(2);
-        Author capek = ho.queryForAuthorByName("K.Capek");
-        ho.removeAuthorByName("Kernighan");
+        Author kernighan = ho.queryForAuthorByName("Kernighan");
+        ho.removeAuthor(kernighan);
+       // ho.removeAuthorByName("Kernighan");
         List<Book> allBooks = ho.queryForAllBooks();
 
     }
@@ -56,6 +57,7 @@ public class DriverApp {
         em.persist(ritchie);
         em.getTransaction()
                 .commit();
+        em.close();
 
 
     }

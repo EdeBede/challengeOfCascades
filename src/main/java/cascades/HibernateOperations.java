@@ -32,9 +32,9 @@ public class HibernateOperations {
 
     }
 
-    public Book findBookById(int id){
+    public Book findBookById(int id) {
         EntityManager em = HibernateOperations.getEntityManager();
-        Book book =  em.find(Book.class,id);
+        Book book = em.find(Book.class, id);
         return book;
     }
 
@@ -43,22 +43,44 @@ public class HibernateOperations {
         Author author = (Author) em.createQuery("SELECT author FROM Author author where author.name=?1")
                 .setParameter(1, queriedName)
                 .getSingleResult();
+
         return author;
     }
 
-    public void removeAuthorByName(String queriedName){
+    public void removeAuthorByName(String queriedName) {
         EntityManager em = HibernateOperations.getEntityManager();
         em.getTransaction()
                 .begin();
         Author a = queryForAuthorByName(queriedName);
-        em.remove(em.contains(a) ? a : em.merge(a));
-
-       // em.remove(a);
+        for (Book b : a.getBooks()) {
+            if (b.getAuthors().size() == 1) {
+                em.remove(b);
+            } else {
+                b.getAuthors().remove(a);
+            }
+        }
+        em.remove(a);
         em.getTransaction()
                 .commit();
     }
 
-    public List<Book> queryForAllBooks(){
+    public void removeAuthor(Author a) {
+        EntityManager em = HibernateOperations.getEntityManager();
+        em.getTransaction()
+                .begin();
+        for (Book b : a.getBooks()) {
+            if (b.getAuthors().size() == 1) {
+                em.remove(b);
+            } else {
+                b.getAuthors().remove(a);
+            }
+        }
+        em.remove(a);
+        em.getTransaction()
+                .commit();
+    }
+
+    public List<Book> queryForAllBooks() {
         EntityManager em = HibernateOperations.getEntityManager();
         List<Book> books = em.createQuery("SELECT book FROM Book book").getResultList();
         return books;
