@@ -5,6 +5,7 @@ import cascades.domain.Book;
 
 import javax.persistence.EntityManager;
 import java.util.Arrays;
+import java.util.List;
 
 public class DriverApp {
 
@@ -14,6 +15,8 @@ public class DriverApp {
 
         Book rur = ho.findBookById(2);
         Author capek = ho.queryForAuthorByName("K.Capek");
+        ho.removeAuthorByName("Kernighan");
+        List<Book> allBooks = ho.queryForAllBooks();
 
     }
 

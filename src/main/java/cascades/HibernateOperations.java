@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Arrays;
+import java.util.List;
 
 public class HibernateOperations {
 
@@ -37,11 +38,30 @@ public class HibernateOperations {
         return book;
     }
 
-    public Author queryForAuthorByName(java.lang.String queriedName) {
+    public Author queryForAuthorByName(String queriedName) {
         EntityManager em = HibernateOperations.getEntityManager();
         Author author = (Author) em.createQuery("SELECT author FROM Author author where author.name=?1")
                 .setParameter(1, queriedName)
                 .getSingleResult();
         return author;
     }
+
+    public void removeAuthorByName(String queriedName){
+        EntityManager em = HibernateOperations.getEntityManager();
+        em.getTransaction()
+                .begin();
+        Author a = queryForAuthorByName(queriedName);
+        em.remove(em.contains(a) ? a : em.merge(a));
+
+       // em.remove(a);
+        em.getTransaction()
+                .commit();
+    }
+
+    public List<Book> queryForAllBooks(){
+        EntityManager em = HibernateOperations.getEntityManager();
+        List<Book> books = em.createQuery("SELECT book FROM Book book").getResultList();
+        return books;
+    }
+
 }
