@@ -1,5 +1,7 @@
 package cascades;
 
+import cascades.domain.Author;
+import cascades.domain.Book;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -11,18 +13,11 @@ import javax.persistence.Persistence;
 public class DriverApp {
 
     public static void main(String[] args) {
-
-     /*   SessionFactory sessionFactory;
-        Session session;
-        Transaction transaction;
-
-        sessionFactory = HibernateUtil.getSessionFactory();
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();*/
-
         HibernateOperations ho = new HibernateOperations();
         ho.saveAuthor();
 
+        Book rur = ho.findBookById(2);
+        Author capek = ho.queryForAuthorByName("K.Capek");
 
     }
 

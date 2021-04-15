@@ -2,6 +2,7 @@ package cascades;
 
 import cascades.domain.Author;
 import cascades.domain.Book;
+//import com.sun.org.apache.xpath.internal.operations.String;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -24,42 +25,41 @@ public class HibernateOperations {
         EntityManager em = HibernateOperations.getEntityManager();
         em.getTransaction()
                 .begin();
-
         Author author = new Author();
         Book book = new Book();
         book.setAuthors(Arrays.asList(author));
         book.setTitle("Rossum's Universal Robots");
         author.setName("K.Capek");
         author.setBooks(Arrays.asList(book));
-
         em.persist(author);
         em.getTransaction()
                 .commit();
 
     }
 
- /*   public void saveMovie() {
+    public Book findBookById(int id){
         EntityManager em = HibernateOperations.getEntityManager();
-        em.getTransaction()
-                .begin();
-        Movie movie = new Movie();
-        movie.setId(1L);
-        movie.setMovieName("The Godfather");
-        movie.setReleaseYear(1972);
-        movie.setLanguage("English");
-        em.persist(movie);
-        em.getTransaction()
-                .commit();
-    }*/
+        Book book =  em.find(Book.class,id);
+        return book;
+    }
 
-
-  /*  public Movie queryForMovieById() {
+   /* public Author queryForAuthorByName(String queriedName){
         EntityManager em = HibernateOperations.getEntityManager();
-        Movie movie = (Movie) em.createQuery("SELECT movie from Movie movie where movie.id = ?1")
-                .setParameter(1, new Long(1L))
+        Author author = (Author) em.createQuery("SELECT author FROM Author author where author.name=?1")
+                .setParameter(1, queriedName)
                 .getSingleResult();
-        return movie;
+        return author;
     }*/
+
+    public Author queryForAuthorByName(java.lang.String queriedName) {
+        EntityManager em = HibernateOperations.getEntityManager();
+        Author author = (Author) em.createQuery("SELECT author FROM Author author where author.name=?1")
+                .setParameter(1, queriedName)
+                .getSingleResult();
+        return author;
+    }
+
+
 
 
     /*public List<?> queryForMovies() {
