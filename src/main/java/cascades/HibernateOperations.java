@@ -8,9 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.util.Arrays;
+import java.util.List;
 
 public class HibernateOperations {
-
     private static final EntityManagerFactory emf;
 
     static {
@@ -28,12 +28,11 @@ public class HibernateOperations {
         em.persist(author);
         em.getTransaction()
                 .commit();
-
     }
 
-    public Book findBookById(int id){
+    public Book findBookById(int id) {
         EntityManager em = HibernateOperations.getEntityManager();
-        Book book =  em.find(Book.class,id);
+        Book book = em.find(Book.class, id);
         return book;
     }
 
@@ -43,5 +42,15 @@ public class HibernateOperations {
                 .setParameter(1, queriedName)
                 .getSingleResult();
         return author;
+    }
+
+    public List<Book> queryForAllBooks() {
+        List<Book> books = null;
+        //TODO
+        return books;
+    }
+
+    public void removeAuthorByName(String queriedName) {
+        //TODO
     }
 }

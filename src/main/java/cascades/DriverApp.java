@@ -2,7 +2,6 @@ package cascades;
 
 import cascades.domain.Author;
 import cascades.domain.Book;
-
 import javax.persistence.EntityManager;
 import java.util.Arrays;
 
@@ -11,11 +10,14 @@ public class DriverApp {
     public static void main(String[] args) {
         HibernateOperations ho = new HibernateOperations();
         setUpAuthorsAndBooks(ho);
-
         //method calls just for try
         //Book rur = ho.findBookById(2);
         //Author capek = ho.queryForAuthorByName("K.Capek");
-
+        /*
+        * TODO: call the method removeAuthorByName and delete
+        *  an author. Afterwards check the list of the books
+        *  with queryForAllBooks
+        * */
     }
 
     private static void setUpAuthorsAndBooks(HibernateOperations ho) {
@@ -54,7 +56,5 @@ public class DriverApp {
         em.persist(ritchie);
         em.getTransaction()
                 .commit();
-
-
     }
 }
