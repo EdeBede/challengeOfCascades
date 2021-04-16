@@ -7,6 +7,8 @@ import cascades.domain.Book;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.List;
 
@@ -66,17 +68,20 @@ public class HibernateOperations {
 
     public void removeAuthor(Author a) {
         EntityManager em = HibernateOperations.getEntityManager();
+        Book bookToRemove=null;
         em.getTransaction()
                 .begin();
         for (Book b : a.getBooks()) {
             if (b.getAuthors().size() == 1) {
+                b.getAuthors().remove(a);
+                bookToRemove = b;
                 em.remove(b);
             } else {
                 b.getAuthors().remove(a);
             }
         }
         em.remove(a);
-        em.getTransaction()
+       em.getTransaction()
                 .commit();
     }
 
@@ -84,6 +89,46 @@ public class HibernateOperations {
         EntityManager em = HibernateOperations.getEntityManager();
         List<Book> books = em.createQuery("SELECT book FROM Book book").getResultList();
         return books;
+    }
+
+    @Transactional
+    public void bulkRemoval(Author a){
+        EntityManager em = HibernateOperations.getEntityManager();
+        em.getTransaction()
+                .begin();
+        Query q = em.createNativeQuery("SELECT ba.bookId FROM BookAuthor ba JOIN Book b ON ba.bookId = b.id JOIN BookAuthor ba2 ON b.id = ba2.bookId WHERE ba2.authorId = ? GROUP BY ba.bookId HAVING count(ba.authorId) = 1");
+        q.setParameter(1, a.getId());
+        List<Integer> bookIds = (List<Integer>)q.getResultList();
+
+        em.getTransaction()
+                .commit();
+
+        em.getTransaction()
+                .begin();
+
+        q = em.createNativeQuery("DELETE FROM BookAuthor ba WHERE ba.authorId = ?");
+        q.setParameter(1, a.getId());
+        q.executeUpdate();
+
+        em.getTransaction()
+                .commit();
+
+
+        em.getTransaction()
+                .begin();
+
+        q = em.createNativeQuery("DELETE FROM Book b WHERE b.id IN (:ids)");
+        q.setParameter("ids", bookIds);
+        q.executeUpdate();
+        em.getTransaction()
+                .commit();
+
+
+       /* em.getTransaction()
+                .begin();
+        em.remove(a);
+        em.getTransaction()
+                .commit();*/
     }
 
 }

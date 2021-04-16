@@ -16,6 +16,11 @@ public class Book {
     private String title;
 
     @ManyToMany
+    @JoinTable(
+            name = "BookAuthor",
+            joinColumns = {@JoinColumn(name = "bookId", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "authorId", referencedColumnName = "id")})
+
     private List<Author> authors = new ArrayList<Author>();
 
     public int getId() {

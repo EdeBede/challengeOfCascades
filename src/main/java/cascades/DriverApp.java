@@ -17,6 +17,8 @@ public class DriverApp {
         Author kernighan = ho.queryForAuthorByName("Kernighan");
         ho.removeAuthor(kernighan);
        // ho.removeAuthorByName("Kernighan");
+        //ho.bulkRemoval(kernighan);
+       // ho.removeAuthorByName("Kernighan");
         List<Book> allBooks = ho.queryForAllBooks();
 
     }
